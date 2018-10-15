@@ -35,6 +35,10 @@ app.use(
 
 app.use(cors());
 app.use(express.json());
+// sanity check
+userRouter.get('/', (req, res, next) => {
+  res.send({ msg: 'Server is up and running!' });
+});
 
 app.use('/api/users', userRouter);
 app.use('/api', authRouter);

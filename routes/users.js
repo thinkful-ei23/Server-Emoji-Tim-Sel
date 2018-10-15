@@ -10,9 +10,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  // console.log(req.body);
   let { username, password } = req.body;
-
+  console.log('TEST', req.body);
   if (!username || !password) {
     return res.status(422).json({
       code: 422,
