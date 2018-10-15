@@ -2,5 +2,10 @@
 
 module.exports = {
   PORT: process.env.PORT || 8080,
-  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000'
+  CLIENT_ORIGIN: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  MONGODB_URI:
+    process.env.DATABASE_URL ||
+    'mongodb://heroku_zrqxlfgm:lqnmhfdo1888sqq9p7tcr0u8i1@ds035498.mlab.com:35498/heroku_zrqxlfgm',
+  TEST_DATABASE_URL:
+    process.env.TEST_DATABASE_URL || 'mongodb://localhost/thinkful-backend-test'
 };
