@@ -3,10 +3,10 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
-const { PORT, CLIENT_ORIGIN } = require('./config');
-const { dbConnect } = require('./db-mongoose');
-// const {dbConnect} = require('./db-knex');
+const { PORT, MONGODB_URI, CLIENT_ORIGIN } = require('./config');
+// const { dbConnect } = require('./db-mongoose');
 
 const app = express();
 
@@ -22,6 +22,8 @@ app.use(
   })
 );
 
+app.use(cors());
+app.use(express.json());
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
@@ -34,8 +36,27 @@ function runServer(port = PORT) {
 }
 
 if (require.main === module) {
-  dbConnect();
-  runServer();
+  // Connect to DB and Listen for incoming connections
+  mongoose
+    .connect(MONGODB_URI)
+    .then(instance => {
+      const conn = instance.connections[0];
+      console.info(
+        `Connected to: mongodb://${conn.host}:${conn.port}/${conn.name}`
+      );
+    })
+    .catch(err => {
+      console.error(err);
+    })
+    .then(() => {
+      app
+        .listen(PORT, function() {
+          console.info(`Server listening on ${this.address().port}`);
+        })
+        .on('error', err => {
+          console.error(err);
+        });
+    });
 }
 
 module.exports = { app };
