@@ -4,10 +4,21 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const passport = require('passport');
 
+const localStrategy = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
 const { PORT, MONGODB_URI, CLIENT_ORIGIN } = require('./config');
-// const { dbConnect } = require('./db-mongoose');
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/users');
 
+// const { dbConnect } = require('./db-mongoose');
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+const jwtAuth = passport.authenticate('jwt', {
+  session: false,
+  failWithError: true
+});
 const app = express();
 
 app.use(
@@ -24,6 +35,10 @@ app.use(
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/users', userRouter);
+app.use('/api', authRouter);
+
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {

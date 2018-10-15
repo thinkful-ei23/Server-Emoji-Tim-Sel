@@ -4,7 +4,9 @@ const router = express.Router();
 const User = require('../models/users');
 
 router.get('/', (req, res, next) => {
-  res.send({ msg: 'user endpoint up and running!' });
+  User.find()
+    .then(users => res.json(users))
+    .catch(err => next(err));
 });
 
 router.post('/', (req, res, next) => {
