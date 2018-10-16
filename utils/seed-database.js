@@ -4,8 +4,10 @@ const mongoose = require('mongoose');
 const { MONGODB_URI } = require('../config');
 
 const User = require('../models/user');
+const Question = require('../models/question');
 
-const seedUsers = require('../db/seed/users');
+// const seedUsers = require('../db/seed/users');
+const seedQuestions = require('../db/seed/questions');
 
 console.log(`Connecting to mongodb at ${MONGODB_URI}`);
 mongoose
@@ -16,7 +18,10 @@ mongoose
   })
   .then(() => {
     console.info('Seeding Database');
-    return Promise.all([User.insertMany(seedUsers), User.createIndexes()]);
+    return Promise.all([
+      Question.insertMany(seedQuestions),
+      Question.createIndexes()
+    ]);
   })
   .then(() => {
     console.info('Disconnecting');

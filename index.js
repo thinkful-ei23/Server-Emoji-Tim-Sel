@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const questions = require('./questions');
+const questions = require('./routes/questions');
 const localStrategy = require('./passport/local');
 const jwtStrategy = require('./passport/jwt');
 const { PORT, MONGODB_URI, CLIENT_ORIGIN } = require('./config');
@@ -50,7 +50,7 @@ userRouter.get('/', (req, res, next) => {
 
 app.use('/api/users', userRouter);
 app.use('/api', authRouter);
-
+app.use('/api/questions', questions);
 function runServer(port = PORT) {
   const server = app
     .listen(port, () => {
