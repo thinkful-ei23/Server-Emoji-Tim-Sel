@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const { MONGODB_URI } = require('../config');
 
-const User = require('../models/user');
+// const User = require('../models/user');
 const Question = require('../models/question');
 
 // const seedUsers = require('../db/seed/users');
