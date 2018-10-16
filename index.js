@@ -5,13 +5,13 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const passport = require('passport');
-
+const questions = require('./questions');
 const localStrategy = require('./passport/local');
 const jwtStrategy = require('./passport/jwt');
 const { PORT, MONGODB_URI, CLIENT_ORIGIN } = require('./config');
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/users');
-
+const name = require('emoji-name-map');
 // const { dbConnect } = require('./db-mongoose');
 passport.use(localStrategy);
 passport.use(jwtStrategy);
