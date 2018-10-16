@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const questionSchema = new mongoose.Schema({
   emoji: { type: String, required: true, unique: true },
   description: { type: String, required: true }
+  //   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 questionSchema.set('toObject', {

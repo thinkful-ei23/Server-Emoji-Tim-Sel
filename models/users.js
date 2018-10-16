@@ -17,7 +17,7 @@ userSchema.set('toObject', {
     delete ret.password;
   }
 });
-userSchema.index({ username: 1, questions: 1 }, { unique: true });
+// userSchema.index({ username: 1, questions: 1 }, { unique: true });
 
 userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);
