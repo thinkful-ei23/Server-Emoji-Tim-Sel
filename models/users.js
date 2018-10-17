@@ -1,10 +1,14 @@
+'use strict';
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  questions: { type: Array }
+  questions: { type: Array },
+  head: { type: Number, default: 0 },
+  tail: { type: Number, default: 4 }
 });
 
 userSchema.set('toObject', {
@@ -15,7 +19,6 @@ userSchema.set('toObject', {
     delete ret.password;
   }
 });
-// userSchema.index({ username: 1, questions: 1 }, { unique: true });
 
 userSchema.methods.validatePassword = function(password) {
   return bcrypt.compare(password, this.password);

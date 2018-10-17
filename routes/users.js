@@ -9,25 +9,12 @@ const Question = require('../models/question');
 
 router.get('/', (req, res, next) => {
   User.find()
-    // .populate('questions')
     .then(users => res.json(users))
     .catch(err => next(err));
 });
 
 router.post('/', (req, res, next) => {
-  // console.log(req.body);
   let { username, password } = req.body;
-  // const questions = [];
-
-  // Question.find().then(results => {
-  //     results.forEach(question => {
-  //         // console.log(question);
-  //         questions.push(question);
-  //     });
-  //     console.log(questions);
-  // });
-
-  // console.log(questions);
 
   if (!username || !password) {
     return res.status(422).json({
@@ -69,47 +56,37 @@ router.post('/', (req, res, next) => {
     });
   }
 
-  return (
-    User.hashPassword(password)
-      .then(digest => {
-        return User.create({
-          username,
-          password: digest
+  const questions = Question.find().then(questions => {
+    return questions.map((question, index) => ({
+      question,
+      next: index === questions.length - 1 ? null : index + 1
+    }));
+  });
+
+  return Promise.all([questions, User.hashPassword(password)])
+    .then(([questions, digest]) => {
+      return User.create({
+        username,
+        password: digest,
+        questions
+      });
+    })
+    .then(user => {
+      res
+        .status(201)
+        .location(`/users/${user.id}`)
+        .json(user);
+    })
+    .catch(err => {
+      if (err.code === 11000) {
+        return res.status(400).json({
+          reason: 'Validation Error',
+          message: 'The username already exists',
+          location: 'username'
         });
-      })
-      // do a find
-      // go to the question collection, grab each item and
-      // put it in the questions specific to user
-      .then(user => {
-        Question.find()
-          .then(results => {
-            results.forEach(question => {
-              user.questions.push(question);
-            });
-            return user.save();
-          })
-          .then(result => {
-            console.log(result);
-            res
-              .status(201)
-              .location(`/users/${user.id}`)
-              .json(user);
-          });
-        // res.status(201)
-        //     .location(`/users/${user.id}`)
-        //     .json(user);
-      })
-      .catch(err => {
-        if (err.code === 11000) {
-          return res.status(400).json({
-            reason: 'Validation Error',
-            message: 'The username already exists',
-            location: 'username'
-          });
-        }
-        next(err);
-      })
-  );
+      }
+      next(err);
+    });
 });
 
 module.exports = router;
