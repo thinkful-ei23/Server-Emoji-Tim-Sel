@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
   emoji: { type: String, required: true, unique: true },
-  description: { type: String, required: true }
-  //   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  description: { type: String, required: true },
+  next: { type: Number }
 });
 
 questionSchema.set('toObject', {
@@ -13,7 +13,6 @@ questionSchema.set('toObject', {
   versionKey: false,
   transform: (doc, ret) => {
     delete ret._id;
-    delete ret.password;
   }
 });
 
