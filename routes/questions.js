@@ -36,24 +36,27 @@ router.post('/', (req, res, next) => {
         tail = user.tail,
         next = null,
         nextNext = null,
-        response = '';
+        response = {};
 
       if (user.questions[current].question.description === answer) {
+        user.questions[current].numberTimesCorrect++;
+        response.numberTimesCorrect = user.questions[current].numberTimesCorrect;
+        response.numberTimesInCorrect = user.questions[current].numberTimesInCorrect;
         user.questions[tail].next = current;
         user.tail = current;
         user.head = user.questions[current].next;
-        user.questions[current].next = null;
-
-        response = 'Correct';
+        user.questions[current].next = null;      
+        response.outcome = 'Correct';
       } else {
+        user.questions[current].numberTimesInCorrect++;
+        response.numberTimesInCorrect = user.questions[current].numberTimesInCorrect;
+        response.numberTimesCorrect = user.questions[current].numberTimesCorrect;
         next = user.questions[current].next;
         user.head = next;
         nextNext = user.questions[next].next;
-
         user.questions[next].next = current;
         user.questions[current].next = nextNext;
-
-        response = 'Incorrect';
+        response.outcome = 'Incorrect';
       }
 
       user.save();

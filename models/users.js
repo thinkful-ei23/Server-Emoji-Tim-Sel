@@ -9,6 +9,8 @@ const userSchema = new mongoose.Schema({
   questions: [
     {
       question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question' },
+      numberTimesCorrect:  { type: Number, default: 0  },
+      numberTimesInCorrect: { type: Number, default: 0 },
       next: { type: Number }
     }
   ],
