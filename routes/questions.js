@@ -15,6 +15,7 @@ router.use(
 );
 
 router.get('/', (req, res, next) => {
+  console.log('We are expecting a userId? router.get, req is: ', req.user);
   const userId = req.user.id;
 
   User.findById(userId)
@@ -51,6 +52,9 @@ router.post('/', (req, res, next) => {
         user.questions[current].numberTimesInCorrect++;
         response.numberTimesInCorrect = user.questions[current].numberTimesInCorrect;
         response.numberTimesCorrect = user.questions[current].numberTimesCorrect;
+
+
+
         next = user.questions[current].next;
         user.head = next;
         nextNext = user.questions[next].next;
